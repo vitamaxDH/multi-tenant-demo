@@ -173,8 +173,12 @@ class StoreController(
 
 
 ## Note
-Hibernate @Filter is not applied to a `direct db call` such as
-JpaRepository.findById or EntityManager.find()
+- `@Filter` in Hibernate < 6
+  - does not apply to `direct fetching`
+  - refer to [the official documentation](https://docs.jboss.org/hibernate/orm/5.6/userguide/html_single/Hibernate_User_Guide.html#pc-filter)
+- `@Filter` in Hibernate >= 6
+  - applies to `direct fetching`
+  - refer to [the official documentation](https://docs.jboss.org/hibernate/orm/6.0/userguide/html_single/Hibernate_User_Guide.html#pc-filter)
 
-Also, it is not working on other threads rather than main thread since Hibernate's session is already closed </br>
-You should find a workaround for those cases such as using QueryDsl to avoid direct db call and creating a new session by SessionFactory
+Also Hibernate session is closed when the main thread finishes its task and the filter won't apply. <br>
+You should find a workaround like creating a new session by SessionFactory.
